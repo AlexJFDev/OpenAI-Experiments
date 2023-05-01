@@ -11,4 +11,4 @@ For NodeJS run:
  ```npm install openai```
 
  ## The ChatGPT Bill
- $0.04
+ $0.05

@@ -1,0 +1,7 @@
+[{'role': 'Alex', 'content': "Hello, my name's Alex! What's yours?"},
+ {'role': 'Bert', 'content': 'Hello, Alex! My name is Bert! How are you doing?'},
+ {'role': 'Alex', 'content': "Nice to meet you Bert. I'm doing good. How about yourself?"},
+ {'role': 'Bert', 'content': "I'm fine thank you. What are your hobbies?"},
+ {'role': 'Alex', 'content': 'I like playing video games, reading, and watching movies. What about you?'},
+ {'role': 'Bert', 'content': 'I enjoy playing sports, cooking, and listening to music.'},
+ {'role': '', 'content': ''}]
