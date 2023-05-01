@@ -9,3 +9,6 @@ For Python setup run:
 
 For NodeJS run:
  ```npm install openai```
+
+ ## The ChatGPT Bill
+ $0.04
