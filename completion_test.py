@@ -3,26 +3,18 @@ import openai
 import os
 import time
 from dotenv import load_dotenv
+from Logger import Logger
+from Conversation import Conversation
+from Message import Message
 
-# Type Imports
-from io import TextIOWrapper
 load_dotenv()
 
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
-def conversation_to_str(conversation: list[dict[str, str]]) -> str:
-    conversation_str: str = ""
-    for message in conversation:
-        role: str = message.get("role")
-        content: str = message.get("content")
-        conversation_str += f"{role}:{content}\n\n"
+def continue_conversation(conversation: Conversation) -> str:
+    conversation_str: str = conversation.get_str()
 
-    return conversation_str
-
-def continue_conversation(conversation: list[dict[str, str]]) -> None:
-    conversation_str: str = conversation_to_str(conversation)
-
-    response = openai.Completion.create(
+    response = openai.Completion.create( # type: ignore
         model="text-davinci-003",
         prompt=conversation_str,
         temperature=0.5,
@@ -32,32 +24,37 @@ def continue_conversation(conversation: list[dict[str, str]]) -> None:
         presence_penalty=0.5,
         stop=["\n"]
     )
-    response_text: str = response.choices[0].text
-    print(response_text)
+
+    response_text: str = response.choices[0].text # type: ignore
+
     try:
-        role, content = response_text.split(":")
-        conversation.append({"role": role, "content": content})
+        role, content = response_text.split(":") # type: ignore
+        conversation.append(Message(role, content)) # type: ignore
+        return(response_text) # type: ignore
     except ValueError:
         print("got unexpected output")
-        conversation.append({"role": "", "content": response_text})
-    
+        conversation.append(Message("", response_text)) # type: ignore
+        return(response_text) # type: ignore
 
-starting_conversation: list[dict[str, str]] = [
-    {"role": "Alex", "content": "Hello, my name's Alex! What's yours?"},
-    {"role": "Bert", "content": "Hello, Alex! My name is Bert! How are you doing?"},
-    {"role": "Alex", "content": "Nice to meet you Bert. I'm doing good. How about yourself?"},
-    {"role": "Bert", "content": "I'm fine thank you. What are your hobbies?"}
-]
+conversation = Conversation(
+    Message("Alex", "Hello, my name's Alex! What's yours?"),
+    Message("Bert", "Hello, Alex! My name is Bert! How are you doing?"),
+    Message("Alex", "Nice to meet you Bert. I'm doing good. How about yourself?"),
+    Message("Bert", "I'm fine thank you. What are your hobbies?"),
+    Message("Alex", "I love playing sports and video games, reading, and watching movies. How about you?"),
+    Message("Bert", "I enjoy playing sports, reading, watching movies, and going on hikes."),
+    Message("Alex", "That's really cool. What sports do you play?"),
+)
 
-print(conversation_to_str(starting_conversation), end="")
+print("This script uses OpenAI's completion models to simulate conversation.\nWhenever you press enter the API will be called with the current conversation and the output will be printed to Stdout and a log file. If you do something other than enter the program will stop.\n--------\nThe starting conversation is below:")
+
+current_time: str = time.strftime("%Y-%m-%d,%H_%M_%S")
+file_name: str = f"logs/completion/{current_time}.ai-log"
+log = Logger(file_name)
+log.write(conversation.get_str(), end="")
 
 while True:
-    if input("enter to continue"): break
-    continue_conversation(starting_conversation)
-
-cur_time: str = time.strftime("%Y-%m-%d,%H_%M_%S")
-file_name: str = f"logs/{cur_time}.ai-log"
-file: TextIOWrapper = open(file_name, "w")
-file.write(str(starting_conversation).replace("},", "},\n"))
-file.close()
-print(starting_conversation)
+    if input(""): break
+    response = continue_conversation(conversation)
+    log.write(response)
+log.close()
