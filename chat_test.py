@@ -23,8 +23,7 @@ messages: list[dict[str, str]] = [{'role': 'user', 'content': "Hello, my name's 
  {'role': 'assistant', 'content': 'Actually, yes. Can you explain to me the importance of cybersecurity in our digital world?'}]
 role_num: int = 0
 while True:
-    if input("enter to continue"):
-        break
+    if input("enter to continue"): break
     chat = openai.ChatCompletion.create(
         model="gpt-3.5-turbo", messages = messages
     )
