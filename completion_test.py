@@ -7,11 +7,14 @@ from Logger import Logger
 from Conversation import Conversation
 from Message import Message
 
+# Type Imports
+from typing import IO, Any
+
 load_dotenv()
 
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
-def continue_conversation(conversation: Conversation) -> str:
+def continue_conversation(conversation: Conversation) -> Any:
     conversation_str: str = conversation.get_str()
 
     response = openai.Completion.create( # type: ignore
@@ -21,8 +24,7 @@ def continue_conversation(conversation: Conversation) -> str:
         max_tokens=100,
         top_p=1,
         frequency_penalty=0.0,
-        presence_penalty=0.5,
-        stop=["\n"]
+        presence_penalty=0.5
     )
 
     response_text: str = response.choices[0].text # type: ignore
@@ -30,11 +32,11 @@ def continue_conversation(conversation: Conversation) -> str:
     try:
         role, content = response_text.split(":") # type: ignore
         conversation.append(Message(role, content)) # type: ignore
-        return(response_text) # type: ignore
+        return(response) # type: ignore
     except ValueError:
-        print("got unexpected output")
+        print("Got unexpected output.")
         conversation.append(Message("", response_text)) # type: ignore
-        return(response_text) # type: ignore
+        return(response) # type: ignore
 
 conversation = Conversation(
     Message("Alex", "Hello, my name's Alex! What's yours?"),
@@ -46,15 +48,23 @@ conversation = Conversation(
     Message("Alex", "That's really cool. What sports do you play?"),
 )
 
-print("This script uses OpenAI's completion models to simulate conversation.\nWhenever you press enter the API will be called with the current conversation and the output will be printed to Stdout and a log file. If you do something other than enter the program will stop.\n--------\nThe starting conversation is below:")
+print("""This script uses OpenAI's completion models to simulate conversation.
+Whenever you press enter the API will be called with the current conversation and the output will be printed to stdout and a log file. If you do something other than enter the program will stop.
+--------
+The starting conversation is below:""")
 
 current_time: str = time.strftime("%Y-%m-%d,%H_%M_%S")
-file_name: str = f"logs/completion/{current_time}.ai-log"
-log = Logger(file_name)
-log.write(conversation.get_str(), end="")
+conversation_log_name: str = f"logs/completion/conversation-{current_time}.ai-log"
+detailed_log_name: str = f"logs/completion/detailed-{current_time}.ai-log"
+conversation_log = Logger(conversation_log_name)
+detailed_log: IO[Any] = open(detailed_log_name, "w")
+
+conversation_log.write(conversation.get_str(), end="")
 
 while True:
     if input(""): break
-    response = continue_conversation(conversation)
-    log.write(response)
-log.close()
+    response: Any = continue_conversation(conversation)
+    conversation_log.write(response.choices[0].text)
+    detailed_log.write(str(response))
+detailed_log.close()
+conversation_log.close()

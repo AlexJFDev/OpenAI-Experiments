@@ -1,0 +1,72 @@
+{
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "logprobs": null,
+      "text": "Bert:I mostly play soccer and basketball. What about you?"
+    }
+  ],
+  "created": 1682960043,
+  "id": "cmpl-7BR4lkXrwhzeqLXsipT3WHXJAqiwF",
+  "model": "text-davinci-003",
+  "object": "text_completion",
+  "usage": {
+    "completion_tokens": 14,
+    "prompt_tokens": 119,
+    "total_tokens": 133
+  }
+}{
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "logprobs": null,
+      "text": "Alex:I play soccer and basketball too, but I also like to play tennis and golf."
+    }
+  ],
+  "created": 1682960046,
+  "id": "cmpl-7BR4o5SBz32UU5B1EM3Znv4dfalSp",
+  "model": "text-davinci-003",
+  "object": "text_completion",
+  "usage": {
+    "completion_tokens": 19,
+    "prompt_tokens": 134,
+    "total_tokens": 153
+  }
+}{
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "logprobs": null,
+      "text": "Bert:That sounds like fun. We should play sometime!"
+    }
+  ],
+  "created": 1682960049,
+  "id": "cmpl-7BR4rHfEjupw8uvLj1gdCqS5xK7Lw",
+  "model": "text-davinci-003",
+  "object": "text_completion",
+  "usage": {
+    "completion_tokens": 13,
+    "prompt_tokens": 154,
+    "total_tokens": 167
+  }
+}{
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "logprobs": null,
+      "text": ""
+    }
+  ],
+  "created": 1682960052,
+  "id": "cmpl-7BR4uIhlI10SgszbZFVx7pmjr46D0",
+  "model": "text-davinci-003",
+  "object": "text_completion",
+  "usage": {
+    "prompt_tokens": 168,
+    "total_tokens": 168
+  }
+}
