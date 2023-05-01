@@ -38,7 +38,7 @@ while True:
     role_num = (role_num + 1) % 2
 
 cur_time: str = time.strftime("%Y-%m-%d,%H_%M_%S")
-file_name: str = f"logs/{cur_time}.ailog"
+file_name: str = f"logs/{cur_time}.ai-log"
 file: TextIOWrapper = open(file_name, "w")
 file.write(str(messages).replace("},", "},\n"))
 file.close()
